@@ -15,3 +15,81 @@
 	?- cousin(X,Y).
 	?- grandson(X,Y).
 	?- descendent(X,Y).
+
+%first argument is father, second argument is child
+father(a,b).
+father(a,c).
+father(b,d).
+father(b,e).
+father(c,f).
+
+% X and Y are brothers
+brother(X,Y) :-
+    dif(X,Y),
+    father(Z,X),
+    father(Z,Y).
+
+% X and Y are cousins
+cousin(X,Y) :-
+    father(Z,Y),father(A,X),
+    brother(Z,A).
+
+% X grandson of Y
+grandson(X,Y) :-
+    father(Z,X),father(Y,Z).
+
+% X descendent of Y
+descendent(X,Y):-
+    father(Y,X).
+
+descendent(X,Y):-
+    father(Y,A),
+    descendent(X,A).
+
+/*
+?- brother(X,Y).
+X = b,
+Y = c
+X = c,
+Y = b
+X = d,
+Y = e
+X = e,
+Y = d
+
+?- cousin(X,Y).
+X = f,
+Y = d
+X = f,
+Y = e
+X = d,
+Y = f
+X = e,
+Y = f
+
+?- grandson(X,Y).
+X = d,
+Y = a
+X = e,
+Y = a
+X = f,
+Y = a
+
+?- descendent(X,Y).
+X = b,
+Y = a
+X = c,
+Y = a
+X = d,
+Y = b
+X = e,
+Y = b
+X = f,
+Y = c
+X = d,
+Y = a
+X = e,
+Y = a
+X = f,
+Y = a
+*/
