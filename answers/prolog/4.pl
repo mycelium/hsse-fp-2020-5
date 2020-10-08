@@ -21,43 +21,8 @@
 
   balanced_tree([], empty).
 
-  balanced_tree(L, instant(Root, Left, Right)) :- tree_split(L, LeftL, [Root|RightList]),
+  balanced_tree(L, instant(Root, Left, Right)) :- tree_split(L, LeftL, [Root|RightL]),
                                               balanced_tree(LeftL, Left),
-                                              balanced_tree(RightList, Right).
+                                              balanced_tree(RightL, Right).
 
   balanced_tree(L, T) :- qsort(L, S), balanced_tree(S, T).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
