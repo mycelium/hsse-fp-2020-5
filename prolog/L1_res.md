@@ -1,4 +1,4 @@
-####### ?- brother(X,Y)
+###### ?- brother(X,Y)
 X = c,
 Y = b ;
 X = b,
@@ -7,7 +7,7 @@ X = e,
 Y = d ;
 X = d,
 Y = e ;
-####### ?- cousin(X,Y).
+###### ?- cousin(X,Y).
 X = d,
 Y = f ;
 X = e,
@@ -17,7 +17,7 @@ Y = d ;
 X = f,
 Y = e ;
 false.
-####### ?- grandson(X,Y).
+###### ?- grandson(X,Y).
 X = d,
 Y = a ;
 X = e,
@@ -25,7 +25,7 @@ Y = a ;
 X = f,
 Y = a ;
 false.
-####### ?- descendent(X,Y).
+###### ?- descendent(X,Y).
 X = b,
 Y = a ;
 X = c,
