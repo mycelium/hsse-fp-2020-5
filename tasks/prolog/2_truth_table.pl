@@ -31,6 +31,17 @@ truth_table(A, B, E) :-
 	nl, fail.
 
 % ТЕСТЫ
-% Таблица истинности: truth_table(A, B, not(xor(A, B))) true	true	true true	false	false false	true false false	false	true false.
+% ?- truth_table(A, B, or(or(A, B), or(A, B))).
+% true true true
+% true false true
+% false true true
+% false false false
+% true.
 
-% Таблица истинности: truth_table(A, B, xor(or(A, B), and(A, B))) true	true	false true	false	true false	true	true false	false	false false.
+
+% ?- truth_table(A, B, xor(xor(A, B), or(A, B))).
+% true true true
+% true false false
+% false true false
+% false false false
+% false.
