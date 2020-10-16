@@ -89,7 +89,7 @@ object Anagrams {
   def combinations(occurrences: Occurrences): List[Occurrences] = occurrences match {
       case Nil => List(Nil)
       case head :: Nil if head._2 == 1 => List(occurrences)
-      case head :: Nil => List(occurrences) ++ combinations(List((head._1, head._2 - 1)))
+      case head :: Nil => occurrences :: combinations(List((head._1, head._2 - 1)))
       case head :: tail =>
         val headOccurs = combinations(List(head))
         val tailOccurs = combinations(tail)
@@ -163,7 +163,7 @@ object Anagrams {
         .flatMap(oc => {
           val words = dictionaryByOccurrences(oc)
           val sentences = findAnagrams(subtract(occurrences, oc))
-          words.flatMap(w => sentences.map(t => List(w) ++ t))
+          words.flatMap(w => sentences.map(t => w :: t))
         })
     }
     findAnagrams(sentenceOccurrences(sentence))
