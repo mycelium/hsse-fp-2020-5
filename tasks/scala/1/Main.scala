@@ -19,9 +19,9 @@ object Main {
 
     println("Counting Change")
     val money1 = 8
-    val coins1 = List(2, 3, 4, 1, 2)
-    printf(s"money = $money1, coins = $coins1, change vars = ${countChange(money1, coins1)}")
-
+    val coins1 = List(2, 3, 4, 1)
+    println(s"As coin list: money = $money1, coins = $coins1, change vars = ${countChangeWithCoins(money1, coins1)}")
+    println(s"As coin denominations list: money = $money1, coins = $coins1, change vars = ${countChangeWithDenoms(money1, coins1)}")
   }
 
   /**
@@ -54,10 +54,20 @@ object Main {
    * there is 1 way to give change for 5 if you have coins with denomiation
    * 2 and 3: 2+3.
    */
-  def countChange(money: Int, coins: List[Int]): Int = coins match {
+
+  //For list of coins (not unique)
+  def countChangeWithCoins(money: Int, coins: List[Int]): Int = coins match {
     case _ if money == 0 => 1
     case Nil if money != 0 => 0
-    case coin :: tail if money - coin < 0 => countChange(money, tail)
-    case coin :: tail => countChange(money - coin, tail) + countChange(money, tail)
+    case coin :: tail if money - coin < 0 => countChangeWithCoins(money, tail)
+    case coin :: tail => countChangeWithCoins(money - coin, tail) + countChangeWithCoins(money, tail)
+  }
+
+  //For list of coin denominations (unique)
+  def countChangeWithDenoms(money: Int, coins: List[Int]): Int = coins match {
+    case _ if money == 0 => 1
+    case Nil if money != 0 => 0
+    case coin :: tail if money - coin < 0 => countChangeWithDenoms(money, tail)
+    case coin :: tail => countChangeWithDenoms(money - coin, coins) + countChangeWithDenoms(money, tail)
   }
 }
