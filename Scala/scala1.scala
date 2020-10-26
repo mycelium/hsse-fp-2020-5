@@ -2,8 +2,7 @@ package scala
 
 
 object Main {
-  var count: Integer = 0
-  def main(args: Array[String]) {
+    def main(args: Array[String]) {
     println("Pascal's Triangle")
     for (row <- 0 to 10) {
       for (col <- 0 to row)
@@ -18,8 +17,8 @@ object Main {
 
     println("Counting Change")
     val coins = List(1,2, 5, 10, 50)
-    val money = 5
-    countChange (money, coins)
+    val money = 10
+    println(countChange (money, coins))
   }
 
   /**
@@ -47,8 +46,6 @@ object Main {
   }
 
 
-
-
   /**
    * Exercise 3 Counting Change
    * Write a recursive function that counts how many different ways you can make
@@ -57,26 +54,17 @@ object Main {
    * 2 and 3: 2+3.
    *
    */
-  def countChange(money: Int, coins: List[Int]): Unit = {
-  //  var count = 0
-    var max = 0
-    var i = 0
-    for( i <- 0 to coins.length - 1) {if (money > coins(i)) max = i}
-    for( i <- 0 to max)
-      Change(money, coins, i, max)
-    print ("There is "+ count+ " way to give change for " + money)}
 
-  def Change(money: Int, coins: List[Int], cur_idx: Int, max: Int): Unit = {
-  if ((money <= 0) || (money < coins(cur_idx))) return
-   if (money == coins(cur_idx))
-  { count = count + 1
-    return }
-    else if (money > coins(cur_idx)) {
-   var a = 0
-  for( a <- cur_idx to max) {   Change(money - coins(cur_idx),coins, a,  max)   }
+ def countChange(money: Int, coins: List[Int]): Int = {
+   count(money, coins)
+
+ }
+  def count(money: Int, coins: List[Int]): Int = {
+    if (money < 0 || coins.isEmpty) 0
+    else if (money - coins.head == 0) 1
+    else if (money - coins.head < 0) 0
+    else countChange(money - coins.head, coins) + countChange(money, coins.tail)
   }
-   }
-
-
 
 }
+
