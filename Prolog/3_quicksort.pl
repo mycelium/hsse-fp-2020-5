@@ -4,7 +4,7 @@ qsort([Head | Tail], K) :-
     insert(Head,Tail, A, B),
     qsort(A, AK),
     qsort(B, BK),
-    append(AK,[A|BK],K).
+    append(AK,[Head|BK],K).
 
 %insert - дополнительный вспомогательный предикат
 insert(_,[],[],[]).
