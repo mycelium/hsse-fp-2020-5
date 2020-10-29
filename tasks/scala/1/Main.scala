@@ -15,14 +15,32 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-
+    if (c == 0 | r == c) {
+      1
+    } else {
+      pascal(c - 1, r - 1) + pascal(c, r - 1)
+    }
   }
 
   /**
    * Exercise 2 Parentheses Balancing
    */
   def balance(chars: List[Char]): Boolean = {
-   
+    def balancer(chars: List[Char], balance: Int = 0): Boolean = {
+      if (chars.isEmpty) {
+        balance == 0
+      } else {
+        val first = chars.head
+        val rest = chars.tail
+        first match {
+          case '(' => balancer(rest, balance + 1)
+          case ')' => balance > 0 && balancer(rest, balance - 1)
+          case _ => balancer(rest, balance)
+        }
+      }
+    }
+
+    balancer(chars)
   }
 
   /**
@@ -33,6 +51,14 @@ object Main {
    * 2 and 3: 2+3.
    */
   def countChange(money: Int, coins: List[Int]): Int = {
-
+    if (money == 0) {
+      1
+    } else if (coins.isEmpty | money < 0) {
+      0
+    } else {
+      val coin = coins.head
+      val rest = coins.tail
+      countChange(money - coin, coins) + countChange(money, rest)
+    }
   }
 }
