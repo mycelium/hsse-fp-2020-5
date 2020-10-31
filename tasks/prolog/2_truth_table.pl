@@ -35,6 +35,7 @@ evaluate(_, false).
 %  evaluate(E, Result), write(Result),nl, fail.
 
 %seems cooler than sof solution
+%funnily enough SWISH does not work with this solution or solution from sof. regtexter.com does.
 truth_table(A,B,E) :- forall((boolean(A), boolean(B)),(write(A), write(" "), 
                                                 write(B), write(" "),evaluate(E,R),writeln(R))).
                                                 
