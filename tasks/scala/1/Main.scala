@@ -9,30 +9,91 @@ object Main {
         print(pascal(col, row) + " ")
       println()
     }
+
+    println("Balance parentheses")
+    val test1: List[Char] = List('(', '(', '(', ')')
+    println(balance(test1))
+
+    val test2: List[Char] = List('(', '(', '(', ')', ')' , ')')
+    println(balance(test2))
+
+    val test3: List[Char] = List('(', '{', '}', ')')
+    println(balance(test3))
+
+    val test4: List[Char] = List('(', '[', '{', '}', ')')
+    println(balance(test4))
+
+    val test5: List[Char] = List('(', '[', '{', '}', ')', ']')
+    println(balance(test5))
+
+    println(countChange(100, List(1, 2, 5, 10, 50, 100)))
   }
 
   /**
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-
+    var res: Int = 0
+    if ((c == 0) || (c == r)) {
+      res = 1
+    } else {
+      res = pascal(c - 1, r - 1) + pascal(c, r - 1)
+    }
+    res
   }
 
   /**
-   * Exercise 2 Parentheses Balancing
+   * Exercise 2
    */
   def balance(chars: List[Char]): Boolean = {
-   
+    def count(char: Char) : Int = chars.count(c => c == char)
+
+    var rightParentCount: Int = count('(')
+    var leftParentCount: Int = count(')')
+    if (rightParentCount == leftParentCount) {
+      if (rightParentCount!=0 && leftParentCount!=0) {
+        return balance(chars.filter(c => c!='(' && c!=')'))
+      }
+    } else {
+      return false
+    }
+
+    rightParentCount = count('{')
+    leftParentCount = count('}')
+    if (rightParentCount == leftParentCount) {
+      if (rightParentCount!=0 && leftParentCount!=0) {
+        return balance(chars.filter(c => c!='{' && c!='}'))
+      }
+    } else {
+      return false
+    }
+
+    rightParentCount = count('[')
+    leftParentCount = count(']')
+    if (rightParentCount == leftParentCount) {
+      if (rightParentCount!=0 && leftParentCount!=0) {
+        return balance(chars.filter(c => c!='[' && c!=']'))
+      }
+    } else {
+      return false
+    }
+    true
   }
 
   /**
-   * Exercise 3 Counting Change
-   * Write a recursive function that counts how many different ways you can make
-   * change for an amount, given a list of coin denominations. For example,
-   * there is 1 way to give change for 5 if you have coins with denomiation
-   * 2 and 3: 2+3.
+   * Exercise 3
    */
   def countChange(money: Int, coins: List[Int]): Int = {
-
+    if (money < 0) {
+      return 0
+    }
+    if (money == 0) {
+      return 1
+    }
+    var copy = coins.map(elem => elem)
+    var count = 0
+    coins.foreach({c => count+=countChange(money - c, copy); copy = copy.filter(cc => cc != c);})
+    count
   }
+
 }
