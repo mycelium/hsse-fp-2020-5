@@ -11,7 +11,21 @@
 	father(b,e).  % 4
 	father(c,f).  % 5
 % указать в каком порядке и какие ответы генерируются вашими методами
-	?- brother(X,Y).
-	?- cousin(X,Y).
-	?- grandson(X,Y).
-	?- descendent(X,Y).
+%	?- brother(X,Y).
+%	?- cousin(X,Y).
+%	?- grandson(X,Y).
+%	?- descendent(X,Y).
+
+brother(X, Y) :- father(F, X), father(F, Y).
+cousin(X, Y) :- brother(Z, U), father(Z, X), father(U, Y).
+grandson(X, Y) :- father(X, T), father(T, Y).
+
+
+descendent(X, Y) :- father(Y, X).
+descendent(X, Y) :- father(Y, T),  descendent(T, X).
+
+
+?- brother(b,c).
+?- cousin(d,e).
+?- grandson(a,e).
+?- descendent(e,a).
