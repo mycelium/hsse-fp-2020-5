@@ -1,0 +1,12 @@
+package Primary
+import forcomp._
+
+  object Primary extends App {
+    println(
+       Anagrams.sentenceAnagrams(ListItem("Real", "fun"))
+           )
+    println(
+       Anagrams.sentenceOccurrencesMap(ListItem("The", "eyes")) 
+       == Anagrams.sentenceOccurrencesMap(ListItem("They", "see"))
+           )
+  }
