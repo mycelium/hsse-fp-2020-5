@@ -33,13 +33,11 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-    var res: Int = 0
     if ((c == 0) || (c == r)) {
-      res = 1
+      1
     } else {
-      res = pascal(c - 1, r - 1) + pascal(c, r - 1)
+      pascal(c - 1, r - 1) + pascal(c, r - 1)
     }
-    res
   }
 
   /**
@@ -47,35 +45,22 @@ object Main {
    */
   def balance(chars: List[Char]): Boolean = {
     def count(char: Char) : Int = chars.count(c => c == char)
-
-    var rightParentCount: Int = count('(')
-    var leftParentCount: Int = count(')')
-    if (rightParentCount == leftParentCount) {
-      if (rightParentCount!=0 && leftParentCount!=0) {
-        return balance(chars.filter(c => c!='(' && c!=')'))
+    def checkParentheses(right: Int, left: Int ) : Boolean = {
+      if (right == left) {
+        return true
       }
-    } else {
-      return false
+      false
+    }
+    if ((chars.contains('(') || chars.contains(')')) && checkParentheses(count('('), count(')'))) {
+      balance(chars.filter(c => c != '(' && c != ')'))
     }
 
-    rightParentCount = count('{')
-    leftParentCount = count('}')
-    if (rightParentCount == leftParentCount) {
-      if (rightParentCount!=0 && leftParentCount!=0) {
-        return balance(chars.filter(c => c!='{' && c!='}'))
-      }
-    } else {
-      return false
+    if ((chars.contains('{') || chars.contains('}')) && checkParentheses(count('{'), count('}'))) {
+      balance(chars.filter(c => c != '{' && c != '}'))
     }
 
-    rightParentCount = count('[')
-    leftParentCount = count(']')
-    if (rightParentCount == leftParentCount) {
-      if (rightParentCount!=0 && leftParentCount!=0) {
-        return balance(chars.filter(c => c!='[' && c!=']'))
-      }
-    } else {
-      return false
+    if ((chars.contains('[') || chars.contains(']')) && checkParentheses(count('['), count(']'))) {
+      balance(chars.filter(c => c != '[' && c != ']'))
     }
     true
   }
@@ -90,10 +75,10 @@ object Main {
     if (money == 0) {
       return 1
     }
-    var copy = coins.map(elem => elem)
-    var count = 0
-    coins.foreach({c => count+=countChange(money - c, copy); copy = copy.filter(cc => cc != c);})
-    count
+    coins match {
+      case Nil => 0
+      case head::tail => countChange(money - head, coins) + countChange(money, tail)
+    }
   }
 
 }

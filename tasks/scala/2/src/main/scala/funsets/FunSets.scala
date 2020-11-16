@@ -82,15 +82,7 @@ object FunSets {
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-  def map(s: Set, f: Int => Int): Set = {
-    var newSet: Set = _ => false
-    for (i <- -bound to bound) {
-      if (contains(s, i)) {
-        newSet = union(newSet, x => f(i) == x)
-      }
-    }
-    newSet
-  }
+  def map(s: Set, f: Int => Int): Set = x => exists(s, elem => f(elem) == x)
 
   /**
    * Displays the contents of a set
@@ -106,4 +98,5 @@ object FunSets {
   def printSet(s: Set) {
     println(toString(s))
   }
+
 }
