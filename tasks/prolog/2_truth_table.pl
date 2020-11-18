@@ -10,3 +10,23 @@
 % true fail true
 % fail true fail
 % fail fail fail
+
+	and(A, B) :- A, B.
+	or(A, B) :- A; B.
+	xor(A, B) :- A \= B.
+	not(A) :- \A.
+	equ(A, B) :- A = B.
+
+	bool(true).
+	bool(false).
+
+	evaluator(A, true) :- A, !.
+	evaluator(A, false).
+
+	truth_table(A, B, E) :- bool(A), bool(B), write(A), write('\t'), write(B), write('\t'), evaluator(E, R), write(R), nl, fail.
+
+	?- truth_table(A, B, and(A, or(A, B))).
+	true    true    true
+	true    false   true
+	false   true    false
+	false   false   false
