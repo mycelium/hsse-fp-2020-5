@@ -2,11 +2,11 @@
 
 qsort([],[]).
 qsort(L,K):-
-		L = [Head|Tail],
-		partition(Head, Tail, L1, L2),
-		qsort(L1, Sort1),
-		qsort(L2, Sort2),
-		append(Sort1, [Head|Sort2], K).
+    L = [Head|Tail],
+    partition(Head, Tail, L1, L2),
+    qsort(L1, Sort1),
+    qsort(L2, Sort2),
+    append(Sort1, [Head|Sort2], K).
 
 partition(_, [], [], []).
 partition(N, [Head|Tail], [Head|Left], Right) :-
