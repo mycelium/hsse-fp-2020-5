@@ -1,9 +1,9 @@
-quicksort([],[]).   
-quicksort([X|Tail], Sorted) :-         
+qsort([],[]).   
+qsort([X|Tail], Sorted) :-         
    split(X, Tail, Small, Big),
-    quicksort(Small, SortedSmall),
-    quicksort(Big, SortedBig),
-    append(SortedSmall, [X|SortedBig], Sorted).
+   qsort(Small, SortedSmall),
+   qsort(Big, SortedBig),
+   append(SortedSmall, [X|SortedBig], Sorted).
 
 split(X, [],[],[]).
 split(X, [Y|Tail], [Y|Small], Big) :-
