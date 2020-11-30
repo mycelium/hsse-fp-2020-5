@@ -5,12 +5,12 @@
 mrg([LeftHead | LeftList], [RightHead | RightList], M) :-  
 	LeftHead < RightHead, 
 	append([LeftHead], M1, M), 
-	mrg(LeftList, [RightHead| RightList], M1).
+	mrg(LeftList, [RightHead | RightList], M1).
 	
 mrg([LeftHead | LeftList], [RightHead | RightList], M) :-  
 	LeftHead >= RightHead, 
 	append([RightHead], M1, M), 
-	mrg([LeftHead| LeftList], RightList, M1).
+	mrg([LeftHead | LeftList], RightList, M1).
 	
 mrg([], R, M) :- 
 	M = R.
