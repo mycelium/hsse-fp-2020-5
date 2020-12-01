@@ -1,6 +1,8 @@
-name := "funsets"
+name := "2"
 
-scalaVersion := "2.12.7"
+version := "0.1"
+
+scalaVersion := "2.13.4"
 
 scalacOptions ++= Seq(
   "-deprecation",
