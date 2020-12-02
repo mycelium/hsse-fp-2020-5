@@ -10,3 +10,35 @@
 % true fail true
 % fail true fail
 % fail fail fail
+
+    and(A,B) :- A, B.
+    redefine_system_predicate(not(A)) :- \+A.
+    or(A,B) :- A; B.
+    xor(A,B) :- not(equ(A,B)).
+    equ(A,B) :- A=B.
+
+% привязка bool значений для функции
+    bool(X) :- X=true.
+    bool(X) :- X=fail.
+
+% вычислительные выражения
+    eval(E, true):- E, !.
+    eval(_, fail).
+
+    truth_table(A, B, E):- bool(A),bool(B),
+                    write(A), write(' '), write(B), write(' '),
+                    eval(E, R), writeln(R), fail.
+    truth_table(_,_,_):- nl, true.
+
+    :- writeln("TRUTH TABLE FOR AND:").
+    :- truth_table(A, B, and(A,B)).
+
+    :- writeln("TRUTH TABLE FOR OR:").
+    :- truth_table(A, B, or(A,B)).
+
+    :- writeln("TRUTH TABLE FOR XOR:").
+    :- truth_table(A, B, xor(A,B)).
+
+    :- writeln("TRUTH TABLE FOR EQUALITY TEST:").
+    :- truth_table(A, B, equ(A,B)).
+
