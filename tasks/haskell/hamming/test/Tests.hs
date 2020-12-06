@@ -101,4 +101,19 @@ cases = [ Case { description = "empty strands"
                , strand2     = "AGTG"
                , expected    = Nothing
                }
+        , Case { description = "very long identical strands"
+               , strand1     = "AGGGTTAAAGGGAAGTCCGTAGCGGCCAACGTGTTAAAGGGAAGTCCGTAGCGGCAGGGTTAAAGGGAAGTC"
+               , strand2     = "AGGGTTAAAGGGAAGTCCGTAGCGGCCAACGTGTTAAAGGGAAGTCCGTAGCGGCAGGGTTAAAGGGAAGTC"
+               , expected    = Just 0
+               }
+        , Case { description = "small distance in very long strands"
+               , strand1     = "AGGGTTAAAGGGAAGTCCGCAGCGGCCAACGTGTTAAAGGGAAGTCCGTAGGGGCAGGGTTAAAGGGAAGTC"
+               , strand2     = "AGGGTTAAAGGGAAGTCCGTAGCGGCCAACGTGTTAAAGGGAAGTCCGTAGCGGCAGGGTTAAAGGGAAGTC"
+               , expected    = Just 2
+               }
+        , Case { description = "large distance in very long strands"
+               , strand1     = "AGGGTTAAAGGGAAGTCCGCAGCGGCCAACGTGTTAAAGGGAAGTCCGTAGGGGCAGGGTTAAAGGGAAGTC"
+               , strand2     = "AAGGGTTAAAGGGAAGTCCGTAGCGGCCAACGTGTTAAAGGGAAGTCCGTAGCGGCAGGGTTAAAGGGAAGT"
+               , expected    = Just 42
+               }
         ]
