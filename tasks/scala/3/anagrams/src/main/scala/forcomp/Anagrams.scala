@@ -33,10 +33,10 @@ object Anagrams {
    *  Note: the uppercase and lowercase version of the character are treated as the
    *  same character, and are represented as a lowercase character in the occurrence list.
    */
-  def wordOccurrences(w: Word): Occurrences = ???
+  def wordOccurrences(w: Word): Occurrences = ('a' to 'z').map(char => (char, w.toLowerCase().count(_ == char))).filter(_._2 > 0).toList
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = ???
+  def sentenceOccurrences(s: Sentence): Occurrences = s.map(word => wordOccurrences(word)).reduceOption((l1, l2) => (l1 ++ l2).groupBy(_._1).mapValues(_.map(_._2).sum).toList).getOrElse(List()).sortWith(_._1 < _._1)
 
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
@@ -53,10 +53,10 @@ object Anagrams {
    *    List(('a', 1), ('e', 1), ('t', 1)) -> Seq("ate", "eat", "tea")
    *
    */
-  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = ???
+  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionary.map(word => (wordOccurrences(word), word)).groupBy(_._1).mapValues(_.map(_._2))
 
   /** Returns all the anagrams of a given word. */
-  def wordAnagrams(word: Word): List[Word] = ???
+  def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences.getOrElse(wordOccurrences(word), List())
 
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`
@@ -80,7 +80,26 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+    val list: List[Occurrences] = List[Occurrences](occurrences)
+    calcCombinations(occurrences, 0, list).map(_.filter(_._2 > 0))
+  }
+  
+  def calcCombinations(occurrences: Occurrences, compNum: Int, list: List[Occurrences]): List[Occurrences] = {
+    var newList = list
+    if (compNum < occurrences.length) {
+      newList = calcCombinations(occurrences, compNum + 1, newList)
+
+      val tuple = occurrences.apply(compNum)
+      if (tuple._2 > 0) {
+        val newOccValue = tuple._2 - 1
+        val newOccurrences = occurrences.updated(compNum, (tuple._1, newOccValue))
+        newList = newList.::(newOccurrences)
+        newList = calcCombinations(newOccurrences, compNum, newList)
+      }
+    }
+    newList
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 
@@ -92,7 +111,7 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences = (x ++ y.map(occ => (occ._1, -occ._2))).groupBy(_._1).mapValues(_.map(_._2).sum).toList.filter(_._2 > 0).sortWith(_._1 < _._1)
 
   /** Returns a list of all anagram sentences of the given sentence.
    *  
@@ -134,6 +153,52 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+   
+    def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+      if (sentence == Nil) {
+        return List(Nil)
+      }
+      val occurrences = sentenceOccurrences(sentence)
+      val level = calcWordTree(occurrences)
+      val sentences = createSentence(level)
+      sentences
+    }
 
+    type TreeLevel = List[(List[Word], List[Any])]
+
+    def calcWordTree(occurrences: Occurrences): TreeLevel = {
+      combinations(occurrences).map(comb => {
+        var level: (List[Word], TreeLevel) = null
+        if (comb != Nil) {
+          val words = dictionaryByOccurrences.getOrElse(comb, List())
+          if (words.nonEmpty) {
+            val subtractedOccurrences = subtract(occurrences, comb)
+            if (subtractedOccurrences.nonEmpty) {
+              val leafs = calcWordTree(subtractedOccurrences)
+              if (leafs != null) {
+                level = (words, leafs.asInstanceOf[TreeLevel])
+              }
+            } else {
+              level = (words, null)
+            }
+          } else {
+            level = null
+          }
+        }
+        level
+      })
+        .filter(_ != null)
+        .filter(level => level._2 == null || level._2.nonEmpty)
+    }
+
+    def createSentence(level: TreeLevel): List[Sentence] = {
+      level.flatMap(elem => {
+        if (elem._2 != null) {
+          elem._1.flatMap(word => createSentence(elem._2.asInstanceOf[TreeLevel]).map(_.::(word)))
+        } else {
+          elem._1.map(word => List(word))
+        }
+      })
+    }
+  }
 }
