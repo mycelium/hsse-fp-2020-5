@@ -10,3 +10,32 @@
 % true fail true
 % fail true fail
 % fail fail fail
+
+and(A, B) :- A, B.
+
+or(A, B) :- A; B.
+
+not(A) :- A, !, fail.
+not(A).
+
+xor(A, B) :- or(A,B), or(not(A), not(B)).
+
+equ(A,B) :- not(xor(A, B)).
+
+bool(true).
+bool(fail).
+my_expess(E, true) :- E, !.
+my_expess(E, fail).
+
+truth_table(A,B,Expression) :-
+  bool(A), bool(B), my_expess(Expression, Result),
+  write(A), write(' '),
+  write(B), write(' '),
+  write(Result),
+  nl, fail.
+  
+%?- truth_table(A,B,equ(A,xor(A,B))).
+%true	true	fail
+%true	fail	true
+%fail	true	fail
+%fail	fail	true
