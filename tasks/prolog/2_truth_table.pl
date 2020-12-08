@@ -10,3 +10,17 @@
 % true fail true
 % fail true fail
 % fail fail fail
+
+and(A,B):- A,B.
+or(A,B):- A;B.
+not(A):- \+A.
+xor(A,B):- or(A,B), not(and(A,B)).
+equ(A,B):- not(xor(A,B)).
+
+bool(true).
+bool(fail).
+
+evaluate(Expr,true):- Expr, !.
+evaluate(_,fail).
+
+truth_table(A,B,Expr):-bool(A),bool(B),write(A),write(' '),write(B),write(' '),evaluate(Expr,Ans),write(Ans),nl,nl,fail.
