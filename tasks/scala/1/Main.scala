@@ -35,19 +35,21 @@ object Main {
    * Exercise 2 Parentheses Balancing
    */
   def balance(chars: List[Char]): Boolean = {
-   var count: Int = 0;
-    for ( i <- 0 to chars.length-1){
-         
-     if(chars(i).equals('(')){
-      count += 1; 
-     } 
-     else if(chars(i).equals(')')) {
-        count -= 1;
-     }
-    
+   def balancer(chars: List[Char], dif: Int): Boolean = {
+      if (chars.isEmpty) {
+        dif == 0
+      } else if (dif < 0) {
+        false
+      } else {
+        chars.head match {
+          case '(' => balance(chars.tail, dif + 1)
+          case ')' => balance(chars.tail, dif - 1)
+          case _ => balance(chars.tail, dif)
+        }
+      }
     }
-    if(count != 0) false
-    else true
+
+    balancer(chars, 0)
   }
 
   /**
