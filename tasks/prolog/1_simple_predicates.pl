@@ -10,6 +10,12 @@
 	father(b,d).  % 3
 	father(b,e).  % 4
 	father(c,f).  % 5
+	
+	descendent(X,Y):- father(X,Y), grandson(X,Y).
+	brother(X,Y):- father(Z,X), father(Z,Y), X \= Y.
+	grandson(X,Y):- father(Z,X), father(Z,Y).
+	cousin(X,Y):- father(Z, X), father(ZZ, Y), brother(Z, ZZ), not(brother(X,Y)) .
+
 % указать в каком порядке и какие ответы генерируются вашими методами
 	?- brother(X,Y).
 	?- cousin(X,Y).
