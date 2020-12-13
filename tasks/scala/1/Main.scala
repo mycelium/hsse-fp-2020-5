@@ -35,17 +35,17 @@ object Main {
    * Exercise 2 Parentheses Balancing
 */
   def balance(chars: List[Char]): Boolean = {
-    def countParanthesis(chars: List[Char], paranthesisCount: Int): Boolean = chars.head match { //,count
-      // we get a char, not a string, but empty char doesn't exist. we check for this condition in last case.
+    def countParanthesis(chars: List[Char], paranthesisCount: Int): Boolean = { //,count
+      // we get a char, not a string, but empty char doesn't exist. we check for this condition outside of matcher.
       //case ("") => paranthesisCount == 0
-      case ('(') => countParanthesis(chars.tail, paranthesisCount + 1)
-      case (')') => countParanthesis(chars.tail, paranthesisCount - 1) //paranthesisCount > 0 &&
-      case (_) => countParanthesis(chars.tail, paranthesisCount)
-      //    } else {
-      //        countParanthesis(chars.tail, currentBalance)
-      //      }
+      if (chars.isEmpty)
+        paranthesisCount == 0
+      else chars.head match {
+        case ('(') => countParanthesis(chars.tail, paranthesisCount + 1)
+        case (')') => countParanthesis(chars.tail, paranthesisCount - 1) //paranthesisCount > 0 &&
+        case (_) => countParanthesis(chars.tail, paranthesisCount)
+      }
     }
-
         countParanthesis(chars, 0)
   }
 
