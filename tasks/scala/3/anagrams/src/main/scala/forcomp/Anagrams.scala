@@ -100,6 +100,7 @@ object Anagrams {
         for {combination <- res; i <- 1 to occurence._2 }
           yield (occurence._1, i) :: combination
       )
+    }
   }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
