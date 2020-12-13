@@ -9,16 +9,20 @@ object Main {
         print(pascal(col, row) + " ")
       println()
     }
-      val equalParanthesis = List('(', 'a', 'b', 'c', ')')
-      println(balance(equalParanthesis))
+      val equalParenthesis = List('(', 'a', 'b', 'c', ')')
+      printf("parenthesis equality for (abc) is %s\n", balance(equalParenthesis))
 
-      val unequalParanthesisClosing = List('(', 'a', 'b', 'c', ')', ')')
-      println(balance(unequalParanthesisClosing))
+      val unequalParenthesisClosing = List('(', 'a', 'b', 'c', ')', ')')
+      printf("parenthesis equality for (abc)) is %s\n", balance(unequalParenthesisClosing))
 
-      val unequalParanthesisOpening = List('(', '(', 'a', 'b', 'c', ')')
-      println(balance(unequalParanthesisOpening))
+      val unequalParenthesisOpening = List('(', '(', 'a', 'b', 'c', ')')
+      printf("parenthesis equality for ((abc) is %s\n", balance(unequalParenthesisOpening))
 
+      val twoCoins = List(2, 3)
+      printf("For %d and coins %s one can have %d way(s) to get change\n", 5, twoCoins.toString(), countChange(5, twoCoins))
 
+      val threeCoins = List(2, 3, 5)
+      printf("For %d and coins %s one can have %d way(s) to get change\n", 8, threeCoins.toString(), countChange(8, threeCoins))
   }
 
   /**
@@ -35,18 +39,18 @@ object Main {
    * Exercise 2 Parentheses Balancing
 */
   def balance(chars: List[Char]): Boolean = {
-    def countParanthesis(chars: List[Char], paranthesisCount: Int): Boolean = { //,count
+    def countParenthesis(chars: List[Char], parenthesisCount: Int): Boolean = { //,count
       // we get a char, not a string, but empty char doesn't exist. we check for this condition outside of matcher.
-      //case ("") => paranthesisCount == 0
+      //case ("") => parenthesisCount == 0
       if (chars.isEmpty)
-        paranthesisCount == 0
+        parenthesisCount == 0
       else chars.head match {
-        case ('(') => countParanthesis(chars.tail, paranthesisCount + 1)
-        case (')') => countParanthesis(chars.tail, paranthesisCount - 1) //paranthesisCount > 0 &&
-        case (_) => countParanthesis(chars.tail, paranthesisCount)
+        case ('(') => countParenthesis(chars.tail, parenthesisCount + 1)
+        case (')') => countParenthesis(chars.tail, parenthesisCount - 1)
+        case (_) => countParenthesis(chars.tail, parenthesisCount)
       }
     }
-        countParanthesis(chars, 0)
+    countParenthesis(chars, 0)
   }
 
   /**
@@ -55,9 +59,12 @@ object Main {
    * change for an amount, given a list of coin denominations. For example,
    * there is 1 way to give change for 5 if you have coins with denomiation
    * 2 and 3: 2+3.
-
-  def countChange(money: Int, coins: List[Int]): Int = {
-
-  }
    */
+  def countChange(money: Int, coins: List[Int]): Int = {
+    if (money < 0 || coins.isEmpty)
+      0
+    else if (money == 0)
+      1
+    else countChange(money, coins.tail) + countChange(money - coins.head, coins)
+  }
 }
