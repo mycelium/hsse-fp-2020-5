@@ -9,6 +9,16 @@ object Main {
         print(pascal(col, row) + " ")
       println()
     }
+      val equalParanthesis = List('(', 'a', 'b', 'c', ')')
+      println(balance(equalParanthesis))
+
+      val unequalParanthesisClosing = List('(', 'a', 'b', 'c', ')', ')')
+      println(balance(unequalParanthesisClosing))
+
+      val unequalParanthesisOpening = List('(', '(', 'a', 'b', 'c', ')')
+      println(balance(unequalParanthesisOpening))
+
+
   }
 
   /**
@@ -23,11 +33,22 @@ object Main {
 
   /**
    * Exercise 2 Parentheses Balancing
-
+*/
   def balance(chars: List[Char]): Boolean = {
+    def countParanthesis(chars: List[Char], paranthesisCount: Int): Boolean = chars.head match { //,count
+      // we get a char, not a string, but empty char doesn't exist. we check for this condition in last case.
+      //case ("") => paranthesisCount == 0
+      case ('(') => countParanthesis(chars.tail, paranthesisCount + 1)
+      case (')') => countParanthesis(chars.tail, paranthesisCount - 1) //paranthesisCount > 0 &&
+      case (_) => countParanthesis(chars.tail, paranthesisCount)
+      //    } else {
+      //        countParanthesis(chars.tail, currentBalance)
+      //      }
+    }
 
+        countParanthesis(chars, 0)
   }
-   */
+
   /**
    * Exercise 3 Counting Change
    * Write a recursive function that counts how many different ways you can make
