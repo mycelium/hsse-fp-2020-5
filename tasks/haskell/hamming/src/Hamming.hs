@@ -1,7 +1,5 @@
 module Hamming (distance) where
 
--- | zipWith is very convenient to do list comparison. So turning String into list.
--- | else if length xs == 0 && length ys == 0 then Just 0
 distance :: String -> String -> Maybe Int
 
 distance xs ys =  
