@@ -101,4 +101,14 @@ cases = [ Case { description = "empty strands"
                , strand2     = "AGTG"
                , expected    = Nothing
                }
+        , Case { description = "custom test 1"
+               , strand1     = "GAGCCTACTAACGGGAT"
+               , strand2     = "CATCGTAATGACGGCCT"
+               , expected    = Just 7
+               }
+        , Case { description = "custom test 1"
+               , strand1     = "GGCCTACGAT"
+               , strand2     = "GACCCACGTT"
+               , expected    = Just 3
+               }
         ]
