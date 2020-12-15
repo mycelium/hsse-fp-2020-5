@@ -1,6 +1,5 @@
 package forcomp
-
-import common._
+import scala.annotation.tailrec
 
 object Anagrams {
 
@@ -33,10 +32,19 @@ object Anagrams {
    *  Note: the uppercase and lowercase version of the character are treated as the
    *  same character, and are represented as a lowercase character in the occurrence list.
    */
-  def wordOccurrences(w: Word): Occurrences = ???
+  def wordOccurrences(w: Word): Occurrences = create_occurrences_from_word(w.toLowerCase(), List()).sortBy(el => el._1)
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = ???
+  def sentenceOccurrences(s: Sentence): Occurrences =
+    {
+      @tailrec
+      def create_occurrences(s: Sentence, occurrences: Occurrences): Occurrences = (s, occurrences) match
+      {
+        case (Nil, occurrences: Occurrences) => occurrences
+        case (h :: tail, occurrences: Occurrences) => create_occurrences(tail, create_occurrences_from_word(h.toLowerCase(), occurrences))
+      }
+      create_occurrences(s, List()).sortBy(el => el._1)
+    }
 
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
@@ -53,10 +61,10 @@ object Anagrams {
    *    List(('a', 1), ('e', 1), ('t', 1)) -> Seq("ate", "eat", "tea")
    *
    */
-  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = ???
+  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionary.groupBy(w => wordOccurrences(w))
 
   /** Returns all the anagrams of a given word. */
-  def wordAnagrams(word: Word): List[Word] = ???
+  def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences.getOrElse(wordOccurrences(word), Nil)
 
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`
@@ -80,7 +88,17 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = occurrences match
+  {
+    case Nil => List(List())
+    case head :: Nil if head._2 == 1 => List(occurrences)
+    case head :: Nil => occurrences :: combinations(List((head._1, head._2-1)))
+    case head :: tail =>
+      val headOccurrences = combinations(List(head))
+      val tailOccurrences = combinations(tail)
+      val result = List(Nil) ++ headOccurrences ++ tailOccurrences ++ headOccurrences.flatMap(h => tailOccurrences.map(t => h ++t))
+      result.distinct
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 
@@ -92,8 +110,13 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
-
+  def subtract(x: Occurrences, y: Occurrences): Occurrences =
+    x.map(el => {
+      val i = y.find(p => p._1 == el._1).getOrElse((el._1, 0))
+      (el._1, el._2 - i._2)
+    })
+      .filter(el => el._2 > 0)
+      .sortBy(el => el._1)
   /** Returns a list of all anagram sentences of the given sentence.
    *  
    *  An anagram of a sentence is formed by taking the occurrences of all the characters of
@@ -134,6 +157,27 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def getAnagrams(occurrences: Occurrences): List[Sentence] = occurrences match {
+      case Nil => List(Nil)
+      case _ => combinations(occurrences)
+        .filter(oc => dictionaryByOccurrences.contains(oc))
+        .flatMap(oc => {
+          val words = dictionaryByOccurrences(oc)
+          val sentences = getAnagrams(subtract(occurrences, oc))
+          words.flatMap(w => sentences.map(t => w :: t))
+        })
+    }
+    getAnagrams(sentenceOccurrences(sentence))
+  }
+
+  @tailrec
+  private def create_occurrences_from_word(word: Word, occurrences: Occurrences): Occurrences = (word, occurrences) match {
+    case (word, occurrences) if word.isEmpty => occurrences
+    case (word: Word, occurrences: Occurrences) if occurrences.exists(p => p._1 == word.head) =>
+      val element = occurrences.find(p => p._1 == word.head).get
+      create_occurrences_from_word(word.tail, occurrences.updated(occurrences.indexOf(element), (element._1, element._2 + 1)))
+    case (word, occurrences) => create_occurrences_from_word(word.tail, (word.head, 1) :: occurrences)
+  }
 
 }
