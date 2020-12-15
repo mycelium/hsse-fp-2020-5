@@ -10,8 +10,90 @@
 	father(b,d).  % 3
 	father(b,e).  % 4
 	father(c,f).  % 5
+
+brother(X, Y) :-
+    father(PersonZ, PersonX),
+    father(PersonZ, PersonY),
+    X \= Y.
+
+
+cousin(X, Y) :-
+    father(PersonZ, PersonX),
+    father(PersonZ, PersonY),
+    father(PersonX, PersonA),
+    father(PersonY, PersonB),
+    X \= Y,
+    DadX \= DadY.
+
+
+grandson(X, Y) :-
+    father(PersonX, PersonZ),
+    father(PersonZ, PersonY).
+
+
+descendent(PersonX, PersonY) :-
+    father(PersonX, PersonY).
+
+
+descendent(PersonX, PersonY) :-
+    father(PersonX, PersonZ),
+    descendent(PersonZ, PersonY).
+
+
+
 % указать в каком порядке и какие ответы генерируются вашими методами
 	?- brother(X,Y).
 	?- cousin(X,Y).
+
 	?- grandson(X,Y).
 	?- descendent(X,Y).
+
+% ?- brother(X, Y).
+% X = b,
+% Y = c ;
+% X = c,
+% Y = b ;
+% X = d,
+% Y = e ;
+% X = e,
+% Y = d ;
+% false.
+
+% ?- cousin(X, Y).
+% X = d,
+% Y = f;
+% X = e,
+% Y = f;
+% X = f,
+% Y = d;
+% X = f,
+% Y = e;
+% false.
+
+% ?- grandson(X, Y).
+% X = a,
+% Y = d;
+% X = a,
+% Y = e;
+% X = a,
+% Y = f;
+% false.
+
+% ?- descendent(X, Y).
+% X = a,
+% Y = b;
+% X = a,
+% Y = c;
+% X = b,
+% Y = d;
+% X = b,
+% Y = e;
+% X = c,
+% Y = f;
+% X = a,
+% Y = d;
+% X = a,
+% Y = e;
+% X = a,
+% Y = f;
+% false.
