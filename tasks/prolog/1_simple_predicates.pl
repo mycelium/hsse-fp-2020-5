@@ -10,8 +10,42 @@
 	father(b,d).  % 3
 	father(b,e).  % 4
 	father(c,f).  % 5
+	brother(X,Y) :- father(Z,X), father(Z,Y), X \= Y.
+	cousin(X,Y) :- father(XZ,X), father(YZ,Y), brother(XZ,YZ).
+	grandson(X,Y) :- father(Y,Z), father(Z,X).
+	descendent(X,Y) :- father(Y,X).
+	descendent(X,Y) :- father(Z,X), descendent(Z,Y).
 % указать в каком порядке и какие ответы генерируются вашими методами
-	?- brother(X,Y).
-	?- cousin(X,Y).
-	?- grandson(X,Y).
-	?- descendent(X,Y).
+	brother_eval :- writeln('brother(X,Y)'), forall(brother(X,Y), writef('X = %p, Y = %p\n', [X, Y])).
+	cousin_eval :- writeln('cousin(X,Y)'), forall(cousin(X,Y), writef('X = %p, Y = %p\n', [X, Y])).
+	grandson_eval :- writeln('grandson(X,Y)'), forall(grandson(X,Y), writef('X = %p, Y = %p\n', [X, Y])).
+	descendent_eval :- writeln('descendent(X,Y)'), forall(descendent(X,Y), writef('X = %p, Y = %p\n', [X, Y])).
+
+	eval_all :- brother_eval, nl, cousin_eval, nl, grandson_eval, nl, descendent_eval, fail.
+
+%	brother(X,Y)
+%	X = b, Y = c
+%	X = c, Y = b
+%	X = d, Y = e
+%	X = e, Y = d
+
+%	cousin(X,Y)
+%	X = d, Y = f
+%	X = e, Y = f
+%	X = f, Y = d
+%	X = f, Y = e
+
+%	grandson(X,Y)
+%	X = d, Y = a
+%	X = e, Y = a
+%	X = f, Y = a
+
+%	descendent(X,Y)
+%	X = b, Y = a
+%	X = c, Y = a
+%	X = d, Y = b
+%	X = e, Y = b
+%	X = f, Y = c
+%	X = d, Y = a
+%	X = e, Y = a
+%	X = f, Y = a
