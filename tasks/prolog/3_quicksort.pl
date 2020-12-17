@@ -12,4 +12,4 @@ qsort([L | Tail], Result) :-
     append(SortedBottomPart, [L | SortedUpperPart], Result).
 
 % ?- qsort([15, 8, 4, 23, 42, 16, 108], K).
-% K = [4, 8, 15, 16, 23, 42, 108] 
+% K = [4, 8, 15, 16, 23, 42, 108]
