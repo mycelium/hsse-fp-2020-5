@@ -1,4 +1,4 @@
 module Hamming (distance) where
 
 distance :: String -> String -> Maybe Int
-distance xs ys = error "Implementation is lost..."
+distance xs ys = if ln xs /= ln ys then Nothing else Just . ln . filter not . zipWith (==) xs $ ys
