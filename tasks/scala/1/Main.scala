@@ -11,6 +11,7 @@ object Main {
 
     println("Balance parentheses")
     println(balance("(a(bc(de)f)g(h)i)jk".toList))
+    println(balance("(a(bc(de)f)g(h)ijk".toList))
 
     println(countChange(100, List(1, 2, 5, 10, 50, 100)))
   }
@@ -30,17 +31,20 @@ object Main {
    * Exercise 2
    */
   def balance(chars: List[Char]): Boolean = {
-    def count(char: Char) : Int = chars.count(c => c == char)
-    def checkParentheses(right: Int, left: Int ) : Boolean = {
-      if (right == left) {
-        return true
+    def checkParentheses(chars: List[Char], acc: Int ) : Boolean = {
+      if (chars.isEmpty) {
+        acc == 0
+      } else if (acc < 0) {
+        false
+      } else {
+        chars.head match {
+          case ')' => checkParentheses(chars.tail, acc - 1)
+          case '(' => checkParentheses(chars.tail, acc + 1)
+          case _ => checkParentheses(chars.tail, acc)
+        }
       }
-      false
     }
-    if ((chars.contains('(') || chars.contains(')')) && checkParentheses(count('('), count(')'))) {
-      balance(chars.filter(c => c != '(' && c != ')'))
-    }
-    true
+    checkParentheses(chars, 0)
   }
 
   /**
