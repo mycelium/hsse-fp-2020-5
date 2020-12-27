@@ -10,3 +10,20 @@
 % true fail true
 % fail true fail
 % fail fail fail
+
+and(A,B) :- A, B.
+or(A,B) :- A ; B.
+xor(A,B) :- not(equ(A,B)).
+not(A) :- \+ A.
+equ(A,B) :- or(and(A,B), and(not(A), not(B))).
+
+
+table_value(true).
+table_value(fail).
+
+truth_table(A,B,E) :-
+    table_value(A),
+    table_value(B),
+    write(A), write(' '), write(B), write(' '),
+    (E -> write(true); write(fail)), nl,
+    fail.
