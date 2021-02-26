@@ -61,6 +61,11 @@ cases = [ Case { description = "empty strands"
                , strand2     = "GGTCG"
                , expected    = Just 1
                }
+        , Case { description = "small distance2"
+               , strand1     = "GGACG"
+               , strand2     = "GATCG"
+               , expected    = Just 2
+               }
         , Case { description = "small distance in long strands"
                , strand1     = "ACCAGGG"
                , strand2     = "ACTATGG"
@@ -76,6 +81,11 @@ cases = [ Case { description = "empty strands"
                , strand2     = "AAG"
                , expected    = Just 1
                }
+        , Case { description = "non-unique character"
+               , strand1     = "AAA"
+               , strand2     = "TAG"
+               , expected    = Just 2
+               }
         , Case { description = "same nucleotides in different positions"
                , strand1     = "TAG"
                , strand2     = "GAT"
@@ -85,6 +95,11 @@ cases = [ Case { description = "empty strands"
                , strand1     = "GATACA"
                , strand2     = "GCATAA"
                , expected    = Just 4
+               }
+        , Case { description = "large distance2"
+               , strand1     = "GATACAAGT"
+               , strand2     = "GCATAAGAG"
+               , expected    = Just 7
                }
         , Case { description = "large distance in off-by-one strand"
                , strand1     = "GGACGGATTCTG"
